@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fat Loss Calculator - The Fit Ghost</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: #eee;
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+            color: #0ff;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            margin-top: 15px;
+            width: 100%;
+            padding: 10px;
+            background-color: #0ff;
+            color: #111;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 10px;
+            background: #222;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>The Fit Ghost - Fat Loss Calculator</h1>
+    <label>Gender:</label>
+    <select id="gender">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+
+    <label>Age:</label>
+    <input type="number" id="age">
+
+    <label>Weight (kg):</label>
+    <input type="number" id="weight">
+
+    <label>Height (cm):</label>
+    <input type="number" id="height">
+
+    <label>Activity Level:</label>
+    <select id="activity">
+        <option value="1.2">Sedentary</option>
+        <option value="1.375">Lightly Active</option>
+        <option value="1.55">Active</option>
+        <option value="1.725">Very Active</option>
+    </select>
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="results" id="results" style="display: none;"></div>
+
+    <script>
+        function calculate() {
+            const gender = document.getElementById('gender').value;
+            const age = parseInt(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+
+            let bmr;
+            if (gender === 'Male') {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+
+            const maintenance = bmr * activity;
+            const fatLoss = maintenance * 0.8;
+            const protein = weight * 2;
+            const fat = weight * 0.8;
+            const proteinCals = protein * 4;
+            const fatCals = fat * 9;
+            const carbs = (fatLoss - proteinCals - fatCals) / 4;
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').innerHTML = `
+                <h3>Your Results:</h3>
+                <p><strong>BMR:</strong> ${Math.round(bmr)} kcal</p>
+                <p><strong>Maintenance Calories:</strong> ${Math.round(maintenance)} kcal</p>
+                <p><strong>Fat Loss Calories (20% deficit):</strong> ${Math.round(fatLoss)} kcal</p>
+                <p><strong>Macros:</strong></p>
+                <ul>
+                    <li>Protein: ${Math.round(protein)} g</li>
+                    <li>Fat: ${Math.round(fat)} g</li>
+                    <li>Carbs: ${Math.round(carbs)} g</li>
+                </ul>
+            `;
+        }
+    </script>
+</body>
+</html>
